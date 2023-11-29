@@ -20,7 +20,7 @@ module.exports = async function (context, req) {
     context.log('Connected to SQL Server');
 
     // Execute a simple SQL query to fetch data
-    const result = await pool.request().query('SELECT ID, Name, Age FROM [dbo].[MyTable]');
+    const result = await pool.request().query('SELECT * FROM [dbo].[MyTable]');
 
     // Send the fetched data in the response
     context.res = {
