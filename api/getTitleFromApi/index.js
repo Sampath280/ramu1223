@@ -1,4 +1,5 @@
 const sql = require('mssql');
+const cors = require('cors')(); // Enable CORS for all origins
 
 const config = {
   server: 'sampatg56.database.windows.net',
@@ -13,6 +14,9 @@ const config = {
 };
 
 module.exports = async function (context, req) {
+  // Enable CORS for the function
+  cors(context.req, context.res, () => {});
+
   const pool = new sql.ConnectionPool(config);
 
   try {
@@ -26,13 +30,22 @@ module.exports = async function (context, req) {
     context.res = {
       status: 200,
       body: result.recordset,
-      contentType: 'application/json',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // Allow requests from any origin
+        'Access-Control-Allow-Methods': 'GET', // Specify the allowed methods
+      },
     };
   } catch (err) {
     context.log.error('Database connection error:', err);
     context.res = {
       status: 500,
       body: 'Internal Server Error',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // Allow requests from any origin
+        'Access-Control-Allow-Methods': 'GET', // Specify the allowed methods
+      },
     };
   } finally {
     if (pool.connected) {
