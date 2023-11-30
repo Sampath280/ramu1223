@@ -10,7 +10,6 @@
 </template>
 
 <script>
-// Import Axios
 import axios from 'axios';
 
 export default {
@@ -25,8 +24,7 @@ export default {
   methods: {
     async fetchData() {
       try {
-        // Use Axios instead of this.$http
-        const response = await axios.get('http://localhost:7071/api/getTitleFromApi');
+        const response = await axios.get('https://your-azure-function-url/api/getTitleFromApi');
         this.data = response.data;
       } catch (error) {
         console.error('Error fetching data:', error);
