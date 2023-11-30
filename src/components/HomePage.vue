@@ -1,46 +1,64 @@
 <template>
   <div>
-    <h1>{{ getTitle }}</h1>
-    <button
-      :disabled="!isDefaultTitle"
-      @click="setTitleViaApi"
-    >
-      Set title via API
-    </button>
-    <button
-      :disabled="isDefaultTitle"
-      @click="resetTitle"
-    >
-      Reset title
-    </button>
-    <p>Use <a href="https://github.com/marcduiker/staticwebapp-vue-vite">this GitHub template repo</a> to make a cool <a href="https://docs.microsoft.com/azure/static-web-apps/">Azure Static Web App</a> yourself! 🚀</p>
+    <h1>Data from Backend</h1>
+    <ul>
+      <li v-for="item in data" :key="item.ID">
+        {{ item.Name }} - Age: {{ item.Age }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-
-import { mapGetters, mapActions } from "vuex";
+// Import Axios
+import axios from 'axios';
 
 export default {
-  components: {
+  data() {
+    return {
+      data: [],
+    };
   },
-   computed: {
-    ...mapGetters([
-        "getTitle",
-        "isDefaultTitle"
-      ])
+  mounted() {
+    this.fetchData();
   },
   methods: {
-    ...mapActions([
-      "setTitleViaApi",
-      "resetTitle"
-    ]),
+    async fetchData() {
+      try {
+        // Use Axios instead of this.$http
+        const response = await axios.get('http://localhost:7071/api/getTitleFromApi');
+        this.data = response.data;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
   },
 };
 </script>
 
-<style scope>
-body {
-  font-family: 'Comic Sans MS'
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 5px;
+  padding: 10px;
+  background-color: #ecf0f1;
+  border-radius: 5px;
+  display: inline-block;
 }
 </style>
